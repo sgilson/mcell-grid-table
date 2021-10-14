@@ -14,6 +14,7 @@ Makefile.in
 /ylwrap
 .deps/
 .dirstamp
+.idea
 
 # http://www.gnu.org/software/autoconf
 
@@ -70,3 +71,10 @@ src/mcell-grid-table.lua
 doc/*.xml
 doc/*.fo
 doc/newly-built-*.pdf
+
+# Python
+src/venv
+src/*.egg-info
+src/build
+src/dist
+**/__pycache__

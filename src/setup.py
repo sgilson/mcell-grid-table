@@ -1,7 +1,9 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
 setup(
-    name='mcgtextension',
-    version='1.0',
-    py_modules=['mcgtextension'],
-    install_requires = ['markdown>=3.0'],
+      name='mcgtextension',
+      version='1.0',
+      packages=find_packages(),
+      install_requires=['markdown>=3.0'],
+      package_data={'mcgtable': ['*.lua']}
 )
