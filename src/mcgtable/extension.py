@@ -39,7 +39,7 @@ class MCellGridTableBlockProcessor(BlockProcessor):
                 # Render code block as table
 
                 e = self.invoke_script(blocks[:block_num + 1])
-                parent.append(e.getroot())
+                parent.append(e)
                 self.process_cell_contents(e)
 
                 # Remove consumed blocks
@@ -78,22 +78,14 @@ class MCellGridTableBlockProcessor(BlockProcessor):
             self.parser.parseChunk(cell, txt)
         # TODO: if just one paragraph found reduce it to just the td/th text?
 
-    def invoke_script(self, blocks):
-        proc = subprocess.Popen(
-              self.SCRIPT_CMD,
-              shell=False,
-              stdin=subprocess.PIPE,
-              stdout=subprocess.PIPE,
-              universal_newlines=True
-        )
-        with proc.stdin as stdin:
-            for block in blocks:
-                stdin.write(block)
-                stdin.write("\n")
-
-        proc.wait(timeout=1)
-        with proc.stdout as stdout:
-            return etree.parse(stdout)
+    def invoke_script(self, blocks) -> etree.Element:
+        # less efficient than pipes, but much simpler
+        result = subprocess.check_output(self.SCRIPT_CMD,
+                                         input=''.join(blocks),
+                                         shell=False,
+                                         universal_newlines=True,
+                                         timeout=5)
+        return etree.fromstring(result)
 
 
 class MCellGridTableExtension(Extension):
